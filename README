@@ -1,0 +1,41 @@
+Sonata Bootstrap Theme
+----------------------
+
+This project manages the Sonata Admin Theme by compiling a tweaked 
+version of the Twitter Bootstrap.
+
+The only difference with the original code is that css selectors 
+are prefixed by a specific key : 'sonata-bc' (Sonata Bootstrap Container).
+
+So a twitter bootstrap theme can be reuse in the a website without too much breaks.
+
+Changes
+=======
+
+rulesets.js file : 
+
+    // If this is the root node, we don't render
+    // a selector, or {}.
+    // Otherwise, only output if this ruleset has rules.
+    if (this.root) {
+        css.push(rules.join(env.compress ? '' : '\n'));
+    } else {
+        if (rules.length > 0) {
+            selector = paths.map(function (p) {
+                var name = p.map(function (s) {
+                    return s.toCSS(env);
+                }).join('').trim();
+            
+                if (name == '.sonata-bc') {
+                  return name;
+                }
+
+                return ".sonata-bc ".concat(name);                    
+            }).join(env.compress ? ',' : (paths.length > 3 ? ',\n' : ', '));
+            css.push(selector,
+                    (env.compress ? '{' : ' {\n  ') +
+                    rules.join(env.compress ? '' : '\n  ') +
+                    (env.compress ? '}' : '\n}\n'));
+        }
+    }
+    css.push(rulesets);
