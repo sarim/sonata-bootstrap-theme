@@ -9,6 +9,13 @@ are prefixed by a specific key : 'sonata-bc' (Sonata Bootstrap Container).
 
 So a twitter bootstrap theme can be reuse in the a website without too much breaks.
 
+Install
+=======
+
+Install locally ``less`` and ``uglify-js``
+
+    # npm install less uglify-js
+
 Changes
 =======
 

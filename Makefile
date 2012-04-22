@@ -1,47 +1,39 @@
-VERSION=1.4.0
-DATE=$(shell DATE)
-BOOTSTRAP = bootstrap.css
-BOOTSTRAP_MIN = bootstrap.min.css
-BOOTSTRAP_LESS = bootstrap.less
-LESS_COMPRESSOR ?= ./src/node_modules/less/bin/lessc
-UGLIFY_JS ?= `which uglifyjs`
+BOOTSTRAP = ./docs/assets/css/bootstrap.css
+BOOTSTRAP_LESS = ./src/bootstrap.less
+BOOTSTRAP_RESPONSIVE = ./docs/assets/css/bootstrap-responsive.css
+BOOTSTRAP_RESPONSIVE_LESS = ./src/responsive.less
+LESS_COMPRESSOR ?= ./node_modules/less/bin/lessc
+UGLIfYJS ?= ./node_modules/uglify-js/bin/uglifyjs
 WATCHR ?= `which watchr`
 
-build:
-	@@if test ! -z ${LESS_COMPRESSOR}; then \
-		sed -e 's/@VERSION/'"v${VERSION}"'/' -e 's/@DATE/'"${DATE}"'/' < src/${BOOTSTRAP_LESS} > ./build/${BOOTSTRAP_LESS}.tmp; \
-		${LESS_COMPRESSOR} ./build/${BOOTSTRAP_LESS}.tmp > ./build/${BOOTSTRAP}; \
-		${LESS_COMPRESSOR} ./build/${BOOTSTRAP_LESS}.tmp > ./build/${BOOTSTRAP_MIN} --compress; \
-		rm -f ./build/${BOOTSTRAP_LESS}.tmp; \
-		echo "Bootstrap successfully built! - `date`"; \
-	else \
-		echo "You must have the LESS compiler installed in order to build Bootstrap."; \
-		echo "You can install it by running: npm install less -g"; \
-	fi
 
-js/min:
-	@@if test ! -z ${UGLIFY_JS}; then \
-		mkdir -p js/min; \
-		uglifyjs -o js/min/bootstrap-alerts.min.js    js/bootstrap-alerts.js;\
-		uglifyjs -o js/min/bootstrap-buttons.min.js   js/bootstrap-buttons.js;\
-		uglifyjs -o js/min/bootstrap-dropdown.min.js  js/bootstrap-dropdown.js;\
-		uglifyjs -o js/min/bootstrap-modal.min.js     js/bootstrap-modal.js;\
-		uglifyjs -o js/min/bootstrap-popover.min.js   js/bootstrap-popover.js;\
-		uglifyjs -o js/min/bootstrap-scrollspy.min.js js/bootstrap-scrollspy.js;\
-		uglifyjs -o js/min/bootstrap-tabs.min.js      js/bootstrap-tabs.js;\
-		uglifyjs -o js/min/bootstrap-twipsy.min.js    js/bootstrap-twipsy.js;\
-	else \
-		echo "You must have the UGLIFYJS minifier installed in order to minify Bootstrap's js."; \
-		echo "You can install it by running: npm install uglify-js -g"; \
-	fi
+#
+# BUILD SIMPLE BOOTSTRAP DIRECTORY
+# lessc & uglifyjs are required
+#
+
+bootstrap:
+	mkdir -p bootstrap/img
+	mkdir -p bootstrap/css
+	mkdir -p bootstrap/js
+	cp -v vendor/bootstrap/img/* bootstrap/img/
+	eval ${LESS_COMPRESSOR} ${BOOTSTRAP_LESS} > bootstrap/css/bootstrap.css
+	eval ${LESS_COMPRESSOR} --compress ${BOOTSTRAP_LESS} > bootstrap/css/bootstrap.min.css
+	eval ${LESS_COMPRESSOR} ${BOOTSTRAP_RESPONSIVE_LESS} > bootstrap/css/bootstrap-responsive.css
+	eval ${LESS_COMPRESSOR} --compress ${BOOTSTRAP_RESPONSIVE_LESS} > bootstrap/css/bootstrap-responsive.min.css
+	cat vendor/bootstrap/js/bootstrap-transition.js vendor/bootstrap/js/bootstrap-alert.js vendor/bootstrap/js/bootstrap-button.js vendor/bootstrap/js/bootstrap-carousel.js vendor/bootstrap/js/bootstrap-collapse.js vendor/bootstrap/js/bootstrap-dropdown.js vendor/bootstrap/js/bootstrap-modal.js vendor/bootstrap/js/bootstrap-tooltip.js vendor/bootstrap/js/bootstrap-popover.js vendor/bootstrap/js/bootstrap-scrollspy.js vendor/bootstrap/js/bootstrap-tab.js vendor/bootstrap/js/bootstrap-typeahead.js > bootstrap/js/bootstrap.js
+	eval ${UGLIfYJS} -nc bootstrap/js/bootstrap.js > bootstrap/js/bootstrap.min.tmp.js
+	echo "/**\n* Bootstrap.js by @fat & @mdo\n* Copyright 2012 Twitter, Inc.\n* http://www.apache.org/licenses/LICENSE-2.0.txt\n*/" > bootstrap/js/copyright.js
+	cat bootstrap/js/copyright.js bootstrap/js/bootstrap.min.tmp.js > bootstrap/js/bootstrap.min.js
+	rm bootstrap/js/copyright.js bootstrap/js/bootstrap.min.tmp.js
+
+#
+# WATCH LESS FILES
+#
 
 watch:
-	@@if test ! -z ${WATCHR}; then \
-	  echo "Watching less files..."; \
-	  watchr -e "watch('lib/.*\.less') { system 'make' }"; \
-	else \
-		echo "You must have the watchr installed in order to watch Bootstrap less files."; \
-		echo "You can install it by running: gem install watchr"; \
-	fi
+	echo "Watching less files..."; \
+	watchr -e "watch('vendor/bootstrap/less/.*\.less') { system 'make' }"
 
-.PHONY: build watch
+
+# .PHONY: docs watch gh-pages
