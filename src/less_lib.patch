@@ -1,8 +1,8 @@
-diff --git a/src/node_modules/less/lib/less/tree/ruleset.js b/usr/local/share/npm/lib/node_modules/less/lib/less/tree/ruleset.js
-index a198617..13e9e94 100644
+diff --git a/usr/local/share/npm/lib/node_modules/less/lib/less/tree/ruleset.js b/src/node_modules/less/lib/less/tree/ruleset.js
+index a198617..8b92c12 100644
 --- a/node_modules/less/lib/less/tree/ruleset.js
 +++ b/node_modules/less/lib/less/tree/ruleset.js
-@@ -217,9 +217,16 @@ tree.Ruleset.prototype = {
+@@ -217,9 +217,17 @@ tree.Ruleset.prototype = {
              if (rules.length > 0) {
                  debugInfo = tree.debugInfo(env, this);
                  selector = paths.map(function (p) {
@@ -13,8 +13,9 @@ index a198617..13e9e94 100644
 +                    
 +                    if (sonataname == '.sonata-bc') {
 +                      return sonataname;
++                    } else if (sonataname == 'body') {
++                        return sonataname.concat(".sonata-bc");
 +                    }
-+
 +                    return ".sonata-bc ".concat(sonataname);
 +                    
                  }).join(env.compress ? ',' : ',\n');
