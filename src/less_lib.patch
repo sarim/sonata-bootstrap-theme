@@ -1,7 +1,7 @@
 diff --git a/src/node_modules/less/lib/less/tree/ruleset.js b/usr/local/share/npm/lib/node_modules/less/lib/less/tree/ruleset.js
 index a198617..13e9e94 100644
---- a/src/node_modules/less/lib/less/tree/ruleset.js
-+++ b/usr/local/share/npm/lib/node_modules/less/lib/less/tree/ruleset.js
+--- a/node_modules/less/lib/less/tree/ruleset.js
++++ b/node_modules/less/lib/less/tree/ruleset.js
 @@ -217,9 +217,16 @@ tree.Ruleset.prototype = {
              if (rules.length > 0) {
                  debugInfo = tree.debugInfo(env, this);
