@@ -35,6 +35,7 @@ clean:
 	cd build && rm -rf ${THEMES}
 
 all: ${THEMES}
+	rm -rf build
 	mkdir -p build
 	mv ${THEMES} build/
 	echo "Done"
