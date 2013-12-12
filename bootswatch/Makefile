@@ -18,7 +18,7 @@ ${THEMES}: .FORCE
 	mkdir -p $@/js
 	cp -v ../vendor/bootstrap/img/* $@/img/
 	cp ./src/custom.less custom.back.less
-	echo @include\ \"./vendor/bootswatch/cyborg/{variables,bootswatch}.less\"\; >> ./src/custom.less
+	echo @import\ \"./vendor/bootswatch/cyborg/{variables,bootswatch}.less\"\; >> ./src/custom.less
 	eval ${LESS_COMPRESSOR} ${BOOTSTRAP_LESS} > $@/css/bootstrap.css
 	eval ${LESS_COMPRESSOR} --compress ${BOOTSTRAP_LESS} > $@/css/bootstrap.min.css
 	eval ${LESS_COMPRESSOR} ${BOOTSTRAP_RESPONSIVE_LESS} > $@/css/bootstrap-responsive.css
