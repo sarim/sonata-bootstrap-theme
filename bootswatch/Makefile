@@ -5,7 +5,7 @@ BOOTSTRAP_RESPONSIVE_LESS = ./src/responsive.less
 LESS_COMPRESSOR ?= ./src/node_modules/less/bin/lessc
 UGLIfYJS ?= uglifyjs
 WATCHR ?= `which watchr`
-THEMES = amelia cerulean cosmo cyborg flatly journal readable simplex slate spacelab spruce superhero swatchmaker united
+THEMES = amelia cerulean cosmo cyborg flatly journal readable simplex slate spacelab spruce superhero united
 
 #
 # BUILD SIMPLE BOOTSTRAP DIRECTORY
@@ -17,8 +17,9 @@ ${THEMES}: .FORCE
 	mkdir -p $@/css
 	mkdir -p $@/js
 	cp -v ../vendor/bootstrap/img/* $@/img/
-	cp ./src/custom.less custom.back.less
-	echo @import\ \"./vendor/bootswatch/cyborg/{variables,bootswatch}.less\"\; >> ./src/custom.less
+	cp ./src/bootstrap.less bootstrap.back.less
+	echo >> ./src/bootstrap.less
+	echo @import\ \"./vendor/bootswatch/2/$@/{variables,bootswatch}.less\"\; >> ./src/bootstrap.less
 	eval ${LESS_COMPRESSOR} ${BOOTSTRAP_LESS} > $@/css/bootstrap.css
 	eval ${LESS_COMPRESSOR} --compress ${BOOTSTRAP_LESS} > $@/css/bootstrap.min.css
 	eval ${LESS_COMPRESSOR} ${BOOTSTRAP_RESPONSIVE_LESS} > $@/css/bootstrap-responsive.css
@@ -28,7 +29,7 @@ ${THEMES}: .FORCE
 	echo "/**\n* Bootstrap.js by @fat & @mdo\n* Copyright 2012 Twitter, Inc.\n* http://www.apache.org/licenses/LICENSE-2.0.txt\n*/" > $@/js/copyright.js
 	cat $@/js/copyright.js $@/js/bootstrap.min.tmp.js > $@/js/bootstrap.min.js
 	rm $@/js/copyright.js $@/js/bootstrap.min.tmp.js
-	mv custom.back.less ./src/custom.less
+	mv bootstrap.back.less ./src/bootstrap.less
 
 clean:
 	cd build && rm -rf ${THEMES}
